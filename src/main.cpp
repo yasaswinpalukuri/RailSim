@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
 
     const std::string path = argv[1];
     const railsim::LoadResult result = railsim::load_track_file(path);
-    if (!result.ok()) {
+    // Tested directly (not via ok()) so clang-tidy can see the dereference below is checked.
+    if (!result.graph) {
         for (const railsim::ParseError& error : result.errors) {
             std::cerr << path << ':' << error.line << ": " << error.message << '\n';
         }

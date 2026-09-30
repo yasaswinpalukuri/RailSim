@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 
 namespace railsim {
 
@@ -15,6 +16,6 @@ struct BlockId {
 
 // Infrastructure state, fixed by the track file or by maintenance.
 // Occupancy is dynamic state and belongs to the interlocking, not here.
-enum class BlockStatus { InService, OutOfService };
+enum class BlockStatus : std::uint8_t { InService, OutOfService };
 
 }  // namespace railsim
