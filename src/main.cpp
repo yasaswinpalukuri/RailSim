@@ -93,16 +93,18 @@ int run(const railsim::TrackGraph& graph, const std::vector<railsim::TrainSpec>&
                                                                   : kExitUnsuccessfulRun;
 }
 
-int dispatch(int argc, char* argv[]) {
-    const std::string command = argc >= 2 ? argv[1] : "";
-    const bool known = (command == "show" && argc == 3) || (command == "route" && argc == 5) ||
-                       (command == "run" && (argc == 3 || argc == 4));
+// `args` holds the command-line arguments without the program name.
+int dispatch(const std::vector<std::string>& args) {
+    const std::string command = args.empty() ? "" : args[0];
+    const std::size_t count = args.size();
+    const bool known = (command == "show" && count == 2) || (command == "route" && count == 4) ||
+                       (command == "run" && (count == 2 || count == 3));
     if (!known) {
         print_usage();
         return EXIT_FAILURE;
     }
 
-    const std::string path = argv[2];
+    const std::string& path = args[1];
     const railsim::LoadResult scenario = railsim::load_track_file(path);
     // Tested directly (not via ok()) so clang-tidy can see the dereferences below are checked.
     if (!scenario.graph) {
@@ -116,15 +118,15 @@ int dispatch(int argc, char* argv[]) {
         return show(*scenario.graph);
     }
     if (command == "route") {
-        return route(*scenario.graph, argv[3], argv[4]);
+        return route(*scenario.graph, args[2], args[3]);
     }
-    if (argc == 3) {
+    if (count == 2) {
         return run(*scenario.graph, scenario.trains, std::cout, std::cerr);
     }
 
-    std::ofstream log_file(argv[3]);
+    std::ofstream log_file(args[2]);
     if (!log_file) {
-        std::cerr << "cannot write '" << argv[3] << "'\n";
+        std::cerr << "cannot write '" << args[2] << "'\n";
         return EXIT_FAILURE;
     }
     return run(*scenario.graph, scenario.trains, log_file, std::cout);
@@ -136,7 +138,7 @@ int dispatch(int argc, char* argv[]) {
 // cppcheck-suppress constParameter
 int main(int argc, char* argv[]) {
     try {
-        return dispatch(argc, argv);
+        return dispatch(std::vector<std::string>(argv + 1, argv + argc));
     } catch (const std::exception& error) {
         std::cerr << "error: " << error.what() << '\n';
         return EXIT_FAILURE;
