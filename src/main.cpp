@@ -29,6 +29,8 @@ void print_summary(const railsim::TrackGraph& graph) {
 
 }  // namespace
 
+// The signature of main is fixed by the C++ standard.
+// cppcheck-suppress constParameter
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cerr << "usage: railsim <track-file>\n";
