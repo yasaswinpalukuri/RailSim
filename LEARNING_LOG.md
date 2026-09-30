@@ -50,3 +50,19 @@
 - **CI lesson:** clang-tidy's optional check cannot follow an optional that is
   reassigned inside a loop; the route rebuild now walks plain `BlockId`s.
 - **Open:** gains were tuned by trial for one train; trains have no length.
+
+## Session 5 (2026-09-30): simulator, integration tests, README
+
+- **Built:** `Simulator` (fixed time-step loop), `train` lines in scenario files,
+  CLI commands `show`, `route`, `run`, two multi-train scenarios, integration
+  tests, full README.
+- **Decisions:** movement authority ends at the far end of the last block the
+  train holds; the route is locked once the next block is held; a refused block
+  is avoided when replanning and asked for only once; the simulator checks the
+  safety rule itself each tick, independently of the interlocking.
+- **Testing idea:** replay the event log using only `entered` and `left` events
+  as a third, independent check, and test that checker against a fabricated bad log.
+- **Found while testing:** a train starting in its destination drove off before
+  stopping (fixed: target speed is zero inside the destination block); my first
+  four-train ring setup was a genuine gridlock, which the design cannot resolve.
+- **Open:** deadlock avoidance, train length, more than one block of lookahead.

@@ -49,6 +49,8 @@ public:
             parse_link(tokens);
         } else if (keyword == "station") {
             parse_station(tokens);
+        } else if (keyword == "train") {
+            parse_train(tokens);
         } else {
             error("unknown keyword '" + keyword + "'");
         }
@@ -62,6 +64,7 @@ public:
         LoadResult result;
         if (errors_.empty()) {
             result.graph = std::move(graph_);
+            result.trains = std::move(trains_);
         }
         result.errors = std::move(errors_);
         return result;
@@ -139,7 +142,41 @@ private:
         }
     }
 
+    std::optional<BlockId> require_station(const std::string& name) {
+        const auto id = graph_.find_station(name);
+        if (!id) {
+            error("unknown station '" + name + "'");
+        }
+        return id;
+    }
+
+    void parse_train(const Tokens& tokens) {
+        if (tokens.size() != 4) {
+            error("expected: train <from_station> <to_station> <cruise_speed_mps>");
+            return;
+        }
+
+        const auto start = require_station(tokens[1]);
+        const auto destination = require_station(tokens[2]);
+        const auto speed = parse_number(tokens[3]);
+        if (!speed || *speed <= 0.0) {
+            error("train speed must be a positive number, got '" + tokens[3] + "'");
+        }
+        if (!start || !destination || !speed || *speed <= 0.0) {
+            return;
+        }
+
+        for (const TrainSpec& other : trains_) {
+            if (other.start == *start) {
+                error("another train already starts at station '" + tokens[1] + "'");
+                return;
+            }
+        }
+        trains_.push_back(TrainSpec{*start, *destination, *speed});
+    }
+
     TrackGraph graph_;
+    std::vector<TrainSpec> trains_;
     std::vector<ParseError> errors_;
     std::size_t line_number_{0};
 };

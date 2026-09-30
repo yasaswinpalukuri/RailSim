@@ -1,0 +1,27 @@
+# Two trains on separate branches both need the junction block J.
+# T1 gets it first; T2 is refused, waits, and follows once J is free.
+#
+#   W1 ---\                /--- E1
+#          J ----- M -----
+#   W2 ---/                \--- E2
+
+block W1 300
+block W2 300
+block J 300
+block M 300
+block E1 300
+block E2 300
+
+link W1 J
+link W2 J
+link J M
+link M E1
+link M E2
+
+station North W1
+station South W2
+station EastUpper E1
+station EastLower E2
+
+train North EastUpper 15
+train South EastLower 15

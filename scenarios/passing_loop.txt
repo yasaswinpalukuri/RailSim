@@ -1,0 +1,24 @@
+# Two trains run towards each other between West and East. The main line
+# (B-C) and the passing loop (B-D) let them get past each other.
+#
+#   A --- B --- C --- E
+#          \         /
+#           -- D ----
+
+block A 200
+block B 300
+block C 250
+block D 400
+block E 200
+
+link A B
+link B C
+link B D
+link C E
+link D E
+
+station West A
+station East E
+
+train West East 15
+train East West 15

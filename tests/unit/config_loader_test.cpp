@@ -107,6 +107,32 @@ TEST(ConfigLoaderTest, RejectsBadStations) {
                          "duplicate station 'X'"));
 }
 
+TEST(ConfigLoaderTest, LoadsTrainsInFileOrder) {
+    const LoadResult result = load("block A 100\nblock B 100\nlink A B\n"
+                                   "station West A\nstation East B\n"
+                                   "train West East 15\n"
+                                   "train East West 12.5\n");
+
+    ASSERT_TRUE(result.ok());
+    ASSERT_EQ(result.trains.size(), 2U);
+    EXPECT_EQ(result.trains[0].start, *result.graph->find_block("A"));
+    EXPECT_EQ(result.trains[0].destination, *result.graph->find_block("B"));
+    EXPECT_DOUBLE_EQ(result.trains[0].cruise_speed_mps, 15.0);
+    EXPECT_DOUBLE_EQ(result.trains[1].cruise_speed_mps, 12.5);
+}
+
+TEST(ConfigLoaderTest, RejectsBadTrains) {
+    const std::string track = "block A 100\nblock B 100\nstation West A\nstation East B\n";
+
+    EXPECT_TRUE(mentions(single_error(track + "train West East\n"), "expected: train"));
+    EXPECT_TRUE(mentions(single_error(track + "train West Nowhere 10\n"), "unknown station"));
+    EXPECT_TRUE(mentions(single_error(track + "train West East fast\n"), "positive number"));
+    EXPECT_TRUE(mentions(single_error(track + "train West East 0\n"), "positive number"));
+    EXPECT_TRUE(mentions(single_error(track + "train West East 10\ntrain West East 10\n"),
+                         "already starts"));
+    EXPECT_TRUE(load(track + "train West East 10\ntrain West East 10\n").trains.empty());
+}
+
 TEST(ConfigLoaderTest, CollectsEveryErrorAndReturnsNoGraph) {
     const LoadResult result = load("block A 100\n"
                                    "block B -1\n"

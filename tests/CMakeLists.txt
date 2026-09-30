@@ -16,6 +16,7 @@ add_executable(railsim_tests
     unit/interlocking_test.cpp
     unit/pid_controller_test.cpp
     unit/train_test.cpp
+    integration/scenario_test.cpp
 )
 target_link_libraries(railsim_tests PRIVATE railsim_core railsim_warnings GTest::gtest_main)
 

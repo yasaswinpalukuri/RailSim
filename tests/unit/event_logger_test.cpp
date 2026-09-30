@@ -54,6 +54,12 @@ TEST(EventLoggerTest, EveryEventTypeHasAName) {
     EXPECT_EQ(to_string(EventType::Left), "left");
     EXPECT_EQ(to_string(EventType::Released), "released");
     EXPECT_EQ(to_string(EventType::ReleaseRejected), "release_rejected");
+    EXPECT_EQ(to_string(EventType::RoutePlanned), "route_planned");
+    EXPECT_EQ(to_string(EventType::NoRoute), "no_route");
+    EXPECT_EQ(to_string(EventType::EmergencyBrake), "emergency_brake");
+    EXPECT_EQ(to_string(EventType::Arrived), "arrived");
+    EXPECT_EQ(to_string(EventType::Timeout), "timeout");
+    EXPECT_EQ(to_string(EventType::SafetyViolation), "safety_violation");
 }
 
 }  // namespace

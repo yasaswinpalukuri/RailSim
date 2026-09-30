@@ -8,6 +8,7 @@ add_library(railsim_core
     interlocking.cpp
     pid_controller.cpp
     train.cpp
+    simulator.cpp
 )
 target_include_directories(railsim_core PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(railsim_core PRIVATE railsim_warnings)

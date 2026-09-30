@@ -21,6 +21,18 @@ std::string_view to_string(EventType type) {
             return "released";
         case EventType::ReleaseRejected:
             return "release_rejected";
+        case EventType::RoutePlanned:
+            return "route_planned";
+        case EventType::NoRoute:
+            return "no_route";
+        case EventType::EmergencyBrake:
+            return "emergency_brake";
+        case EventType::Arrived:
+            return "arrived";
+        case EventType::Timeout:
+            return "timeout";
+        case EventType::SafetyViolation:
+            return "safety_violation";
     }
     return "unknown";
 }

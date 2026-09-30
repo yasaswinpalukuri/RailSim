@@ -4,14 +4,6 @@
 #include <string>
 
 namespace railsim {
-namespace {
-
-std::string train_label(TrainId train) {
-    return "T" + std::to_string(train.value);
-}
-
-}  // namespace
-
 std::string_view to_string(MoveResult result) {
     switch (result) {
         case MoveResult::Granted:

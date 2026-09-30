@@ -16,6 +16,12 @@ enum class EventType : std::uint8_t {
     Left,
     Released,
     ReleaseRejected,
+    RoutePlanned,
+    NoRoute,
+    EmergencyBrake,
+    Arrived,
+    Timeout,
+    SafetyViolation,
 };
 
 [[nodiscard]] std::string_view to_string(EventType type);
