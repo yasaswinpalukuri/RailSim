@@ -29,6 +29,6 @@ Prints the track network. Add two station names to get the shortest route betwee
 
 - [x] Step 1: build skeleton, CI, track graph, config loader
 - [x] Step 2: route planner (Dijkstra)
-- [ ] Step 3: event logger and interlocking
+- [x] Step 3: event logger and interlocking
 - [ ] Step 4: PID speed controller and train
 - [ ] Step 5: simulator, integration tests, full README

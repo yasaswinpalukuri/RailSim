@@ -25,3 +25,16 @@
 - **CI lessons:** clang-tidy cannot see through `ok()` to an optional check;
   `enum class` defaults to `int`; `main`'s signature needs a cppcheck suppression.
 - **Open:** still no local CMake, clang-tidy, or cppcheck; CI is the only full check.
+
+## Session 3 (2026-09-30): event logger, interlocking
+
+- **Built:** `EventLogger` (in-memory record plus CSV sink) and `Interlocking`
+  (reserve, enter, release, with a logged reason for every rejection).
+- **Decisions:** one `holder` field per block so two trains in a block cannot be
+  represented; deny by default; `MoveResult` enum instead of bool or strings;
+  the planner is advisory and the interlocking is the authority, so `enter`
+  re-checks everything; logger does not own its stream (the caller's
+  `std::ofstream` is the RAII owner) and flushes every line.
+- **Testing idea:** a seeded random test fires 20,000 requests and checks the
+  safety rule after each one, not only the cases I thought of.
+- **Open:** head-on trains can deadlock; trains are treated as one block long.
