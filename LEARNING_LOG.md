@@ -38,3 +38,15 @@
 - **Testing idea:** a seeded random test fires 20,000 requests and checks the
   safety rule after each one, not only the cases I thought of.
 - **Open:** head-on trains can deadlock; trains are treated as one block long.
+
+## Session 4 (2026-09-30): PID controller, train model
+
+- **Built:** `PidController` (clamped output, anti-windup, derivative on the
+  measurement) and `Train` (speed, braking curve, latched emergency brake).
+- **Decisions:** the train knows nothing about the track and is told only the
+  distance to the danger point; two layers, where the PID follows a braking
+  curve and the emergency brake is an independent backstop; "not clear" logic so
+  a NaN distance counts as danger; time passed in as `dt`, so tests need no clock.
+- **CI lesson:** clang-tidy's optional check cannot follow an optional that is
+  reassigned inside a loop; the route rebuild now walks plain `BlockId`s.
+- **Open:** gains were tuned by trial for one train; trains have no length.

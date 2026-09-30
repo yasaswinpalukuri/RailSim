@@ -31,7 +31,9 @@ std::optional<Route> find_route(const TrackGraph& graph, BlockId from, BlockId t
 
     const std::size_t count = graph.block_count();
     std::vector<double> distance(count, std::numeric_limits<double>::infinity());
-    std::vector<std::optional<BlockId>> previous(count);
+    // previous[i] is the block the search reached block i from. Only entries on
+    // a found path are ever read, so the initial value does not matter.
+    std::vector<BlockId> previous(count, from);
 
     // Min-heap of (distance, block index). An entry is never updated in place;
     // a shorter distance is pushed as a new entry and the old one goes stale.
@@ -71,10 +73,10 @@ std::optional<Route> find_route(const TrackGraph& graph, BlockId from, BlockId t
 
     Route route;
     route.length_m = distance[to.value];
-    std::optional<BlockId> step = to;
-    while (step.has_value()) {
-        route.blocks.push_back(*step);
-        step = previous[step->value];
+    route.blocks.push_back(to);
+    for (BlockId step = to; step != from;) {
+        step = previous[step.value];
+        route.blocks.push_back(step);
     }
     std::reverse(route.blocks.begin(), route.blocks.end());
     return route;

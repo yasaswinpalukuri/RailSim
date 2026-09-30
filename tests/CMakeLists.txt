@@ -14,6 +14,8 @@ add_executable(railsim_tests
     unit/route_planner_test.cpp
     unit/event_logger_test.cpp
     unit/interlocking_test.cpp
+    unit/pid_controller_test.cpp
+    unit/train_test.cpp
 )
 target_link_libraries(railsim_tests PRIVATE railsim_core railsim_warnings GTest::gtest_main)
 
