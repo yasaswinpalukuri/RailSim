@@ -1,0 +1,23 @@
+# Two stations joined by a main line (B-C) and a longer passing loop (B-D),
+# plus a siding that is closed for maintenance.
+#
+#   A --- B --- C --- E
+#         | \       /
+#         S   - D -
+
+block A 200
+block B 300
+block C 250
+block D 400
+block E 200
+block S 100 out_of_service
+
+link A B
+link B C
+link B D
+link C E
+link D E
+link B S
+
+station West A
+station East E

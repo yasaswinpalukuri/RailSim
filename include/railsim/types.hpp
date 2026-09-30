@@ -1,0 +1,20 @@
+#pragma once
+
+#include <cstddef>
+
+namespace railsim {
+
+// Strong type: a BlockId cannot be passed where a raw index (or, later, a
+// TrainId) is expected. The value is the block's index inside TrackGraph.
+struct BlockId {
+    std::size_t value{};
+
+    friend bool operator==(BlockId lhs, BlockId rhs) { return lhs.value == rhs.value; }
+    friend bool operator!=(BlockId lhs, BlockId rhs) { return !(lhs == rhs); }
+};
+
+// Infrastructure state, fixed by the track file or by maintenance.
+// Occupancy is dynamic state and belongs to the interlocking, not here.
+enum class BlockStatus { InService, OutOfService };
+
+}  // namespace railsim

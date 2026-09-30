@@ -1,0 +1,30 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-test-analyse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install analysis tools
+        run: sudo apt-get update && sudo apt-get install -y clang-tidy cppcheck
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DRAILSIM_WARNINGS_AS_ERRORS=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      - name: clang-tidy
+        run: clang-tidy -p build src/*.cpp
+
+      - name: cppcheck
+        run: >
+          cppcheck --std=c++17 --enable=warning,style,performance,portability
+          --error-exitcode=1 --inline-suppr --suppress=missingIncludeSystem
+          -I include src

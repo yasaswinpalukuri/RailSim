@@ -1,0 +1,13 @@
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  clang-analyzer-*,
+  performance-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  readability-*,
+  -readability-identifier-length,
+  -readability-magic-numbers
+WarningsAsErrors: '*'
+HeaderFilterRegex: 'include/railsim/.*'
