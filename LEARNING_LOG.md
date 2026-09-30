@@ -12,3 +12,16 @@
 - **CMake ideas:** targets carry their own include paths and flags; warnings live
   on an interface target so third-party code is not affected.
 - **Open:** install CMake locally; confirm CI is green after the first push.
+
+## Session 2 (2026-09-30): CI fixes, route planner
+
+- **Built:** `find_route` (Dijkstra over block lengths) and a CLI mode that prints
+  the route between two stations.
+- **Decisions:** Dijkstra over BFS (blocks have different lengths) and over A*
+  (no coordinates for a heuristic, tiny graph); lazy deletion in
+  `std::priority_queue` instead of decrease-key; availability passed in as a
+  predicate so the planner does not depend on the interlocking; start block is
+  never filtered; ties resolve the same way every run.
+- **CI lessons:** clang-tidy cannot see through `ok()` to an optional check;
+  `enum class` defaults to `int`; `main`'s signature needs a cppcheck suppression.
+- **Open:** still no local CMake, clang-tidy, or cppcheck; CI is the only full check.
