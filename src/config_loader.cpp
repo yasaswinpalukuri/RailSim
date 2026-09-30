@@ -1,5 +1,6 @@
 #include "railsim/config_loader.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -166,11 +167,14 @@ private:
             return;
         }
 
-        for (const TrainSpec& other : trains_) {
-            if (other.start == *start) {
-                error("another train already starts at station '" + tokens[1] + "'");
-                return;
-            }
+        const BlockId start_block = *start;
+        const bool start_taken =
+            std::any_of(trains_.begin(), trains_.end(), [start_block](const TrainSpec& other) {
+                return other.start == start_block;
+            });
+        if (start_taken) {
+            error("another train already starts at station '" + tokens[1] + "'");
+            return;
         }
         trains_.push_back(TrainSpec{*start, *destination, *speed});
     }
