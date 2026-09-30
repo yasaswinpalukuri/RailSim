@@ -26,3 +26,4 @@ ctest --test-dir build --output-on-failure
 - [ ] Step 3: event logger and interlocking
 - [ ] Step 4: PID speed controller and train
 - [ ] Step 5: simulator, integration tests, full README
+# RailSim
